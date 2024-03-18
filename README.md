@@ -1,11 +1,16 @@
-<img src="https://img.shields.io/badge/Go-00ADD8?style=for-the-badge&logo=go&logoColor=white" />
-# go-clean-architecture
-
 <h1 align='center'>
     ⚡ go-clean-architecture
 </h1>
-<h4 align='center'>
-    GoFiber code structure for developing using clean architecture
+
+<a href="https://gofiber.io">
+  <picture alt="Fiber Logo" align="right" style="margin-right: 25px">
+    <source height="75" media="(prefers-color-scheme: dark)" srcset="https://raw.githubusercontent.com/gofiber/docs/master/static/img/logo-dark.svg">
+    <img height="75" alt="Fiber Logo" align="right" style="margin-right: 25px" src="https://raw.githubusercontent.com/gofiber/docs/master/static/img/logo.svg">
+  </picture>
+</a>
+
+<h4>
+    ✨ GoFiber code structure using clean architecture
 </h4>
 
 This structure, created following the development guide's for vertical slice architecture, will help to isolate the dependencies, make development easier and have a cleaner and testable code in every package.
