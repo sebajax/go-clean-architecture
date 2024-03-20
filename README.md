@@ -262,10 +262,15 @@ https://github.com/sebajax/go-vertical-slice-architecture/blob/eb79ccae805d23b6f
 ### Database migration script
 
 ```bash
+    # Install migration to linux dist on wsl
+        curl -L https://github.com/golang-migrate/migrate/releases/download/v4.17.0/migrate.linux-amd64.tar.gz | tar xvz
+        mv migrate $GOPATH/bin/
+    # Migration help
+        migrate -help
     # Create the script
-        migrate create -ext sql -dir /migrations -seq [script_name]
+        migrate create -ext sql -dir migration -seq [script_name]
     # Run the script
-        migrate -database ${POSTGRESQL_URL} -path /migrations up
+        migrate -database ${POSTGRESQL_URL} -path migration up
 
     # It will run automatically when the database initializes
 ```
