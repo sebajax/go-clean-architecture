@@ -6,6 +6,7 @@ import (
 	"log"
 
 	"github.com/golang-migrate/migrate/v4"
+	_ "github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 	"github.com/jackc/pgx/v5/pgxpool"
 	_ "github.com/jackc/pgx/v5/stdlib"
@@ -17,12 +18,8 @@ type DbConn struct {
 
 // initializes the database connection pool and runs migrations
 func InitPool(config *DbConfig) *DbConn {
-	// set up the connection string to the db
-	connectionString := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
-		config.dbHost, config.dbPort, config.dbUser, config.dbPassword, config.dbName)
-
 	// initialize the connection pool
-	dbpool, err := pgxpool.New(context.Background(), connectionString)
+	dbpool, err := pgxpool.New(context.Background(), config.dbUrl)
 	if err != nil {
 		log.Panicf("error opening database: %v", err)
 	}
@@ -35,10 +32,12 @@ func InitPool(config *DbConfig) *DbConn {
 
 	// run migrations if needed only if migration path is set
 	if config.dbMigrationPath != nil {
-		if err := runMigration(connectionString, *config.dbMigrationPath); err != nil {
-			log.Panicf("error pinging database: %v", err)
+		if err := runMigration(config.dbUrl, *config.dbMigrationPath); err != nil {
+			log.Panicf("error running migration: %v", err)
 		}
 	}
+
+	log.Print("success database connection")
 
 	// return the connection pool pointer singleton connection
 	return &DbConn{
@@ -63,10 +62,17 @@ func runMigration(connString string, path string) error {
 		return err
 	}
 
-	// Migrate up to the latest active version
-	if err := m.Up(); err != nil && err != migrate.ErrNoChange {
+	// migrate up to the latest active version
+	err = m.Up()
+	if err != nil {
+		if err == migrate.ErrNoChange {
+			log.Println("no new migrations to apply")
+			return nil
+		}
 		return err
 	}
+
+	log.Println("migrations were applied successfully")
 
 	return nil
 }

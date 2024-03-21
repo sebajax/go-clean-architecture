@@ -208,7 +208,7 @@ https://github.com/sebajax/go-vertical-slice-architecture/blob/eb79ccae805d23b6f
 
 ```bash
     # Build server
-        docker-compose -p go-vertical-slice-architecture build
+        docker-compose -p go-clean-architecture build
 
     # Start server
         docker-compose up -d
